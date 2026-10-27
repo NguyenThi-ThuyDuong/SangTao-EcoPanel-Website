@@ -67,7 +67,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link href="<?=THUMBS?>/50x50x2/<?=UPLOAD_PHOTO_L.$logo['photo']?>" rel="shortcut icon" type="image/x-icon" />
+	<link href="<?= !empty($logo['photo']) ? (THUMBS . '/50x50x2/' . UPLOAD_PHOTO_L . $logo['photo']) : '../assets/images/logo.png' ?>" rel="shortcut icon" type="image/x-icon" />
 	<title>Administrator - <?=$setting['tenvi']?></title>
 
 	<!-- CSS -->

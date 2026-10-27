@@ -160,4 +160,18 @@
     $config['photo']['man_photo'][$nametype]['tieude_photo'] = true;*/ 
 
      
+    /* Thư viện hình ảnh thực tế */
+    $nametype = "hinh-anh";
+    $config['photo']['man_photo'][$nametype]['title_main_photo'] = "Hình ảnh thực tế";
+    $config['photo']['man_photo'][$nametype]['number_photo'] = 1;
+    $config['photo']['man_photo'][$nametype]['images_photo'] = true;
+    $config['photo']['man_photo'][$nametype]['avatar_photo'] = true;
+    $config['photo']['man_photo'][$nametype]['link_photo'] = false;
+    $config['photo']['man_photo'][$nametype]['tieude_photo'] = true;
+    $config['photo']['man_photo'][$nametype]['mota_photo'] = true;
+    $config['photo']['man_photo'][$nametype]['width_photo'] = 800;
+    $config['photo']['man_photo'][$nametype]['height_photo'] = 600;
+    $config['photo']['man_photo'][$nametype]['thumb_photo'] = '400x300x1';
+    $config['photo']['man_photo'][$nametype]['img_type_photo'] = '.jpg|.gif|.png|.jpeg|.gif|.JPG|.PNG|.JPEG|.Png|.GIF';
+
 ?>

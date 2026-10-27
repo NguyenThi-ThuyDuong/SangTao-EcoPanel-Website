@@ -1,5 +1,6 @@
 <?php
-define('LIBRARIES', './libraries/');
+chdir(__DIR__);
+define('LIBRARIES', __DIR__ . '/libraries/');
 require_once LIBRARIES . "config.php";
 require_once LIBRARIES . "autoload.php";
 new AutoLoad();

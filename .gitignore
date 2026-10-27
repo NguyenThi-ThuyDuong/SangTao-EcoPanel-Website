@@ -12,6 +12,9 @@ caches/*
 thumbs/*
 !thumbs/.gitkeep
 
+# SQL files (không đưa lên Git)
+*.sql
+
 # Temporary files
 *.tmp
 *.log

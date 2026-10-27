@@ -1,25 +1,6 @@
 <?php
     /* Config type - Group */
-    $config['group'] = array(
-        /*"Group Sản Phẩm" => array(
-            "product" => array("san-pham"),
-            //"tags" => array("san-pham"),
-            //"static" => array("gioi-thieu-san-pham"),
-            //"photo" => array("slide-product"),
-            //"photo_static" => array("watermark"),
-            //"newsletter" => array("dangkybaogia")
-        ),*/
-        "Nội dung trang chủ" => array(
-            "photo" => array("slider"),
-            // "news" => array("feedback"),
-            // "photo_static" => array("background-tieuchi"),
-            //"tags" => array("tin-tuc"),
-            //"newsletter" => array("dangkytuyendung")
-        ),
-        // "Quản lý tin tức" => array(
-        //     "news" => array("tin-tuc","tin-tuc-hen-gio"),
-        // ),
-    );
+    $config['group'] = array();
 
     /* Config type - Product */
     require_once LIBRARIES.'type/config-type-product.php';

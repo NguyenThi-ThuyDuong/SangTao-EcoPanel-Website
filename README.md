@@ -1,94 +1,78 @@
-1/	Htaccess: Các bạn đổi lại tên của file **a.htaccess** -> **.htaccess**
+# SÁNG TẠO ECOPANEL - NGUYỄN THANH TUYỀN
+> Website Doanh nghiệp & Quản trị Nội dung (CMS) chuyên ngành sản xuất tấm Panel cách nhiệt, chống cháy và thi công nhà xưởng, kho lạnh, nhà lắp ghép chất lượng cao.
 
-2/  Database: **libraries > database > sneakerltepdo.sql**
+---
 
-3/  config-type.php: **libraries > config-type.php**
+## 1. THÔNG TIN HỆ THỐNG & KHỞI CHẠY
 
-4/  Tạo lang column: **libraries > lang > langinit.php**
+* **Thư mục dự án:** `D:\ThucTap\SangTaoEcoPanel`
+* **Website Frontend:** [http://localhost:8000/](http://localhost:8000/)
+* **Trang Quản trị Admin CMS:** [http://localhost:8000/sota/](http://localhost:8000/sota/)
+  * **Tài khoản đăng nhập:** `admin`
+  * **Mật khẩu:** `admin`
+* **Cơ sở dữ liệu:**
+  * **Hệ quản trị:** MySQL (Host: `127.0.0.1`, Cổng: `3306`)
+  * **Database Name:** `sangtao_ecopanel`
+  * **File SQL sao lưu đồng bộ:** `database_sangtao_ecopanel.sql` (nằm tại thư mục gốc dự án)
 
-5/  Các phần nội dung liên quan đến ckeditor. Ra ngoài web lúc gọi mọi người sử dụng thêm hàm htmlspecialchars_decode(string)
+---
 
-6/  Các folder trong **UPLOAD** được **Tạo** và **Define** tự động. Các bạn muốn **Tạo** hoặc **Define** thêm thì nhập tên folder trong file **constant.php**. Ví dụ:
+## 2. HƯỚNG DẪN KHỞI ĐỘNG NHANH
 
-    $array_const = array('TEN_FOLDER1', 'TEN_FOLDER2', ...);
+### Cách 1: Khởi động 1-Click
+Nhấp đúp vào file `run.bat` tại thư mục dự án. Script sẽ tự khởi động server cục bộ và mở trình duyệt tại `http://localhost:8000/`.
 
-7/	**config['group']** trong **config-type.php** giúp mình **Group Các Config có cùng nội dung** với nhau. Các bạn cấu hình theo mẫu mình đã để trong file. Hiện tại hỗ trợ các loại sau: **product**, **news**, **static**, **tags**, **newsletter**, **photo**, **photo_static**
+### Cách 2: Chạy qua dòng lệnh (Terminal / PowerShell)
+1. Đảm bảo dịch vụ MySQL đang chạy (qua Laragon hoặc XAMPP).
+2. Chạy lệnh:
+   ```bash
+   cd D:\ThucTap\SangTaoEcoPanel
+   php -S 127.0.0.1:8000 router.php
+   ```
+3. Mở trình duyệt truy cập:
+   * Trang chủ: `http://localhost:8000/`
+   * Quản trị: `http://localhost:8000/sota/`
 
-8/	Js có áp dụng code optimize nên các bạn lưu ý khi viết script hoặc nhúng các thư việc khác nhớ kiểm tra dấu **';'** ở cuối các đoạn script. Vì khi optimize thành file cached mà thiếu dấu **';'** . Js sẽ bị lỗi. Ví dụ:
+---
 
-	$(window).scroll(function(){
-        // Do something
-    });
+## 3. CƠ CHẾ QUẢN TRỊ 100% CÁC SECTION TRANG CHỦ
 
-    $('body').on("click",".element",function() {
-        // Do something
-    });
+Toàn bộ các thành phần hiển thị trên trang chủ đều được kết nối trực tiếp với cơ sở dữ liệu và quản trị linh hoạt qua Admin CMS:
 
-9/  Cần lưu ý các config sau:
-    
-    // 'url' để lại dấu '/' khi up lên host
-    
-    'database' => array(
-		'url' => '/',
-	),
-	
-	// Để FALSE các config sau khi up lên host
-	
-	'website' => array(
-		// Khi bật: Các account admin sẽ có full, Cấu hình được email host, cấu hình được ngôn ngữ (Chi bật khi lập trình hoặc debug)
-    	'debug-developer' => false,
+| STT | Section Ngoài Trang Chủ | Mục Quản Lý Trong Admin | Bảng Dữ Liệu MySQL | Mô Tả Khả Năng Tùy Biến |
+| :---: | :--- | :--- | :--- | :--- |
+| **1** | **Header & Topbar** | **Thiết lập thông tin** | `table_setting` | Đổi Hotline, Email, Địa chỉ văn phòng, Giờ làm việc, Zalo, Slogan thương hiệu |
+| **2** | **Logo & Favicon** | **Hình ảnh & Video > Logo / Favicon** | `table_photo` | Tải ảnh logo mới, tự động đồng bộ trên toàn trang và tab trình duyệt |
+| **3** | **Slideshow Banner** | **Hình ảnh & Video > Slideshow** | `table_photo` (`slider`) | Thêm, sửa, xóa slide, đổi ảnh banner, tiêu đề, mô tả, link nút bấm |
+| **4** | **Giới thiệu EcoPanel** | **Trang tĩnh > Giới thiệu** | `table_static` (`gioi-thieu`) | Đổi bài viết giới thiệu, ảnh nhà xưởng thực tế, hồ sơ năng lực |
+| **5** | **Sản phẩm Panel** | **Quản lý sản phẩm > Sản phẩm** | `table_product` (`san-pham`) | Thêm/sửa danh mục, bảng thông số kỹ thuật (EPS, PU, Rockwool...), giá và hình ảnh |
+| **6** | **Dịch vụ & Quy trình** | **Quản lý bài viết > Dịch vụ** | `table_news` (`dich-vu`) | Quản lý các gói thi công nhà xưởng, kho lạnh, homestay lắp ghép |
+| **7** | **Dự án tiêu biểu** | **Quản lý bài viết > Dự án** | `table_news` (`du-an`) | Đăng hồ sơ công trình hoàn thiện: diện tích m², địa điểm, tiến độ, hình ảnh thực tế |
+| **8** | **Hình ảnh thực tế** | **Hình ảnh & Video > Hình ảnh thực tế** | `table_photo` (`hinh-anh`) | Thêm ảnh công trường, xưởng sản xuất, tự động hiển thị phóng to Lightbox |
+| **9** | **Tin tức & Báo giá** | **Quản lý bài viết > Tin tức** | `table_news` (`tin-tuc`) | Soạn thảo bài viết cẩm nang, tiêu chuẩn PCCC, cập nhật bảng báo giá vật liệu mới |
+| **10**| **Đối tác chiến lược** | **Hình ảnh & Video > Đối tác** | `table_photo` (`doi-tac`) | Quản lý danh sách thương hiệu tôn thép đồng hành (Hoa Sen, Đông Á, Zacs, Hòa Phát...) |
+| **11**| **Quản lý báo giá (Leads)** | **Quản lý nhận tin > Đăng ký nhận báo giá** | `table_newsletter` | Lưu tự động mọi yêu cầu báo giá của khách hàng từ form hoặc modal ngoài website |
 
-    	// Khi bật: Website sẽ xuất ra từng đường dẫn CSS. Ngược lại sẽ tạo file cached.css (Tên file có thể thay đổi tùy ý)
-		'debug-css' => false,
+---
 
-		// Khi bật: Website sẽ xuất ra từng đường dẫn JS. Ngược lại sẽ tạo file cached.js (Tên file có thể thay đổi tùy ý)
-    	'debug-js' => false,
-    ),
+## 4. CẤU TRÚC THƯ MỤC CHÍNH
 
-	// Upload: max-width - max-height. Dùng để giới hạn kích thước upload hình. Nếu vượt quá sẽ tự resize lại theo config
-	
-	'website' => array(
-    	'upload' => array(
-			'max-width' => 1600,
-			'max-height' => 1600
-		)
-    ),
-    
-    // Slug - Seo chỉ nên để Tiếng Việt.
-    // Chỉ sử dụng đa ngôn ngữ khi đường dẫn có yêu cầu vi/tenkhongdau hoặc en/tenkhongdau (Code các bạn tự làm phần này)
-
-    'slug' => array(
-		'lang' => array(
-			"vi"=>"Tiếng Việt",
-			// "en"=>"Tiếng Anh"
-		)
-	),
-    'seo' => array(
-		'lang' => array(
-			"vi"=>"Tiếng Việt",
-			// "en"=>"Tiếng Anh"
-		)
-	)
-    
-    // Dùng để tạo phần Ngôn Ngữ SEO cho **Trang tĩnh trong admin** . Nếu trang không có ngôn ngữ khác thì chỉ cần thiết lập 'vi'
-    
-    'comlang' => array(
-		"gioi-thieu" => array("vi" => "gioi-thieu", "en" => "about-us"),
-		"san-pham" => array("vi" => "san-pham", "en" => "product"),
-		"tin-tuc" => array("vi" => "tin-tuc", "en" => "news"),
-		"tuyen-dung" => array("vi" => "tuyen-dung", "en" => "recruitment"),
-		"thu-vien-anh" => array("vi" => "thu-vien-anh", "en" => "gallery"),
-		"video" => array("vi" => "video", "en" => "video"),
-		"lien-he" => array("vi" => "lien-he", "en" => "contact")
-	)
-	
-    // Khi làm ở local, các bạn nên để config 'active' này bằng **FALSE** để có thể test được khi ko có hoặc ko đăng ký mã captcha
-
-    'googleAPI' => array(
-		'recaptcha' => array(
-			'active' => FALSE,
-			'urlapi' => 'https://www.google.com/recaptcha/api/siteverify',
-			'sitekey' => '6LezS5kUAAAAAF2A6ICaSvm7R5M-BUAcVOgJT_31',
-			'secretkey' => '6LezS5kUAAAAAGCGtfV7C1DyiqlPFFuxvacuJfdq'
-		)
-	),
+```
+SangTaoEcoPanel/
+├── ajax/                      # Xử lý các request AJAX (gửi form báo giá, lọc sản phẩm)
+├── assets/                    # Tài nguyên giao diện (CSS, JS, Webfonts, Images)
+│   ├── css/style.css          # File CSS giao diện chính của website
+│   └── js/main.js             # File xử lý sự kiện tương tác giao diện
+├── libraries/                 # Thư viện core framework, router, PDO Database
+│   ├── config.php             # Cấu hình kết nối MySQL và hệ thống
+│   └── type/                  # Cấu hình phân hệ module (product, news, photo, static)
+├── sota/                      # Hệ thống trang quản trị Admin CMS
+├── templates/                 # Giao diện hiển thị người dùng (Frontend View)
+│   ├── index/index_tpl.php    # Template hiển thị toàn bộ nội dung trang chủ
+│   └── layout/                # Template khung: menu, header, footer, modal
+├── upload/                    # Thư mục lưu trữ hình ảnh tải lên từ Admin
+├── database_sangtao_ecopanel.sql # Bản sao lưu cơ sở dữ liệu mới nhất
+├── router.php                 # Router điều hướng cho PHP Built-in Server
+├── run.bat                    # File kích hoạt chạy nhanh 1-Click
+└── README.md                  # Tài liệu mô tả dự án
+```

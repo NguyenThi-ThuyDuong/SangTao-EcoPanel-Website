@@ -9,15 +9,6 @@
 <body>
 
     <div id="wrapper">
-        <!-- <div id="preloader">
-            <div class="spinner">
-                <div class="rect1"></div>
-                <div class="rect2"></div>
-                <div class="rect3"></div>
-                <div class="rect4"></div>
-                <div class="rect5"></div>
-            </div>
-        </div> -->
         <div class="content1">
         <?php
         include TEMPLATE . LAYOUT . "seo.php";
@@ -28,14 +19,9 @@
         <div class="<?= ($source == 'index') ? 'wrap-home' : 'wrap-main' ?> w-clear"><?php include TEMPLATE . $template . "_tpl.php"; ?></div>
         <?php
         include TEMPLATE . LAYOUT . "footer.php";
-        //include TEMPLATE.LAYOUT."mmenu.php";
-        // include TEMPLATE . LAYOUT . "phone_mobile.php";
-        // include TEMPLATE . LAYOUT . "phone-vr.php";
         include TEMPLATE . LAYOUT . "bonut.php";
-        include TEMPLATE . LAYOUT . "nhantin_btn.php";
         include TEMPLATE . LAYOUT . "modal.php";
         include TEMPLATE . LAYOUT . "js.php";
-        // if($deviceType=='mobile') include TEMPLATE.LAYOUT."phone.php";
         ?>
         </div>
     </div>

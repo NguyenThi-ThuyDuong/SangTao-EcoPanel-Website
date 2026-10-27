@@ -1,141 +1,126 @@
-<?php if(isset($popup) && $popup['hienthi'] == 1) { ?>
-<!-- Modal popup -->
-<div class="modal fade" id="popup" tabindex="-1" role="dialog" aria-labelledby="popupModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h6 class="modal-title" id="popupModalLabel"><?=$popup['ten'.$lang]?></h6>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <a href="<?=$popup['link']?>"><img src="<?=THUMBS?>/800x530x1/<?=UPLOAD_PHOTO_L.$popup['photo']?>"
-                        alt="Popup"></a>
-            </div>
-        </div>
+<!-- Modal Popup Nhận Báo Giá -->
+<div
+  class="modal-overlay"
+  id="quoteModal"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="modal-title"
+>
+  <div class="modal-content">
+    <button class="modal-close" id="quoteModalClose" aria-label="Đóng popup">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    <div class="modal-header">
+      <div class="section-badge">
+        <i class="fa-solid fa-calculator" aria-hidden="true"></i> Báo giá trực tiếp
+      </div>
+      <h3 id="modal-title">Yêu Cầu Báo Giá &amp; Tư Vấn Kỹ Thuật</h3>
+      <p>
+        Sáng Tạo EcoPanel - Nguyễn Thanh Tuyền sẽ liên hệ lại ngay trong 15 phút.
+      </p>
     </div>
-</div>
-<?php } ?>
-
-<!-- Modal notify -->
-<div class="modal modal-custom fade" id="popup-notify" tabindex="-1" role="dialog" aria-labelledby="popup-notify-label"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-top modal-md" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h6 class="modal-title" id="popup-notify-label"><?=thongbao?></h6>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body"></div>
-            <div class="modal-footer justify-content-center">
-                <button type="button" class="btn btn-danger" data-dismiss="modal"><?=thoat?></button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Modal form -->
-<div class="modal modal-custom fade" id="popup-form" tabindex="-1" role="dialog" aria-labelledby="popup-notify-label"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-top modal-md" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title w-100 d-block text-center" id="popup-notify-label"><strong>ĐĂNG KÝ TƯ
-                        VẤN</strong></h5>
-                <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button> -->
-            </div>
-            <div class="modal-body">
-                <form class="form-contact validation-contact" novalidate method="post" action=""
-                    enctype="multipart/form-data" style="width: 100%;" autocomplete="on">
-                    <div class="row">
-                        <div class="input-contact col-sm-6">
-                            <input type="text" class="form-control" autocomplete="name" id="ten" name="name-newsletter"
-                                placeholder="Họ tên" required />
-                            <div class="invalid-feedback">Vui lòng nhập họ và tên</div>
-                        </div>
-                        <div class="input-contact col-sm-6">
-                            <input type="number" class="form-control" autocomplete="tel" id="dienthoai"
-                                name="phone-newsletter" placeholder="Số điện thoại" required />
-                            <div class="invalid-feedback">Vui lòng nhập số điện thoại</div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="input-contact col-sm-12">
-                            <input type="email" class="form-control" autocomplete="email" id="email"
-                                name="email-newsletter" placeholder="Email" required />
-                            <div class="invalid-feedback">Vui lòng nhập địa chỉ email</div>
-                        </div>
-                    </div>
-                    <div class="row d-flex justify-content-center">
-                        <div class="col-md-12">
-                            <div class="input-contact">
-                                <textarea class="form-control" id="noidung" name="noidung-newsletter"
-                                    placeholder="Nội dung cần tư vấn ..." required></textarea>
-                                <div class="invalid-feedback">Vui lòng nhập nội dung</div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <input
-                                style="width: 100%; height: 100%;font-size: 16px;font-weight: 500;background: var(--color-main); border: 0;"
-                                type="submit" class="btn btn-primary" name="submit-newsletter" value="ĐĂNG KÝ"
-                                disabled />
-                        </div>
-                    </div>
-                    <input type="hidden" name="recaptcha_response_newsletter" id="recaptchaResponseNewsletter">
-                </form>
-            </div>
-            <!-- <div class="modal-footer justify-content-center">
-				<button type="button" class="btn btn-danger" data-dismiss="modal"><?=thoat?></button>
-			</div> -->
-        </div>
-    </div>
+    <form id="quoteForm">
+      <div class="form-group">
+        <label class="form-label" for="quoteName">Họ và tên của bạn: *</label>
+        <input
+          type="text"
+          id="quoteName"
+          name="quoteName"
+          class="form-control"
+          placeholder="Ví dụ: Anh Hoàng / Chị Linh"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="quotePhone"
+          >Số điện thoại liên hệ (Zalo): *</label
+        >
+        <input
+          type="tel"
+          id="quotePhone"
+          name="quotePhone"
+          class="form-control"
+          placeholder="Ví dụ: 0988xxxxxx"
+          required
+          pattern="[0-9]{10,11}"
+        />
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="quoteService"
+          >Dịch vụ / Sản phẩm bạn quan tâm: *</label
+        >
+        <select id="quoteService" name="quoteService" class="form-control" required>
+          <option value="Mua tấm Panel cách nhiệt (EPS, PU, Rockwool)">
+            Mua tấm Panel cách nhiệt (EPS, PU, Rockwool)
+          </option>
+          <option value="Thi công Nhà xưởng Panel trọn gói">
+            Thi công Nhà xưởng Panel trọn gói
+          </option>
+          <option value="Thi công Kho lạnh / Kho đông bảo quản">
+            Thi công Kho lạnh / Kho đông bảo quản
+          </option>
+          <option value="Xây dựng Nhà lắp ghép / Văn phòng / Homestay">
+            Xây dựng Nhà lắp ghép / Văn phòng / Homestay
+          </option>
+          <option value="Thi công Phòng sạch chuẩn GMP">
+            Thi công Phòng sạch chuẩn GMP
+          </option>
+          <option value="Mua phụ kiện nhôm định hình và cửa panel">
+            Mua phụ kiện nhôm định hình và cửa panel
+          </option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="quoteArea"
+          >Diện tích dự kiến (m²) hoặc ghi chú thêm:</label
+        >
+        <textarea
+          id="quoteArea"
+          name="quoteArea"
+          class="form-control"
+          rows="3"
+          placeholder="Ví dụ: Nhà xưởng khoảng 1.500m2 tại Bình Dương, cần thi công vách và trần panel..."
+        ></textarea>
+      </div>
+      <button
+        type="submit"
+        class="btn btn-primary"
+        style="width: 100%; padding: 13px"
+      >
+        <i class="fa-solid fa-paper-plane" aria-hidden="true"></i> Gửi Yêu Cầu Báo Giá Ngay
+      </button>
+    </form>
+  </div>
 </div>
 
-<!-- Modal cart -->
-<div class="modal fade" id="popup-cart" tabindex="-1" role="dialog" aria-labelledby="popup-cart-label"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-top modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h6 class="modal-title" id="popup-cart-label"><?=giohangcuaban?></h6>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body"></div>
-        </div>
-    </div>
+<!-- Lightbox Modal -->
+<div
+  class="lightbox-modal"
+  id="lightboxModal"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Xem ảnh phóng to"
+>
+  <div class="lightbox-content">
+    <button
+      class="modal-close"
+      id="lightboxClose"
+      style="
+        top: -45px;
+        right: 0;
+        background: rgba(255, 255, 255, 0.2);
+        color: #fff;
+      "
+      aria-label="Đóng ảnh"
+    >
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    <img
+      src=""
+      alt="Hình ảnh thực tế công trình"
+      class="lightbox-img"
+      id="lightboxImg"
+    />
+    <div class="lightbox-caption" id="lightboxCaption"></div>
+  </div>
 </div>
-
-<?php 
-/*
-	<!-- Modal prototype -->
-	<button type="button" class="btn btn-primary open-modal-cart" data-toggle="modal" data-target=".exampleModal">
-		Open Modal
-	</button>
-	<div class="modal fade exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-		<div class="modal-dialog modal-lg" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h6 class="modal-title" id="exampleModalLabel">Modal title</h6>
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<div class="modal-body">
-					...
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-					<button type="button" class="btn btn-primary">Save changes</button>
-				</div>
-			</div>
-		</div>
-	</div>
-*/ 
-?>

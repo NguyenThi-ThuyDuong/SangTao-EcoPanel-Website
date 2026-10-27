@@ -1,1082 +1,519 @@
-<?php 
-    $banner_img = (!empty($banner['photo']) && file_exists(UPLOAD_PHOTO_L . $banner['photo']))
-        ? UPLOAD_PHOTO_L . $banner['photo']
-        : (file_exists('upload/photo/banner_real.jpg') ? 'upload/photo/banner_real.jpg' : 'assets/images/hero_banner.svg');
-    $cta_img = (!empty($bg_tuvan['photo']) && file_exists(UPLOAD_PHOTO_L . $bg_tuvan['photo']))
-        ? UPLOAD_PHOTO_L . $bg_tuvan['photo']
-        : (file_exists('upload/photo/cta_real.jpg') ? 'upload/photo/cta_real.jpg' : 'assets/images/cta_banner.svg');
-    $placeholder_img = 'assets/images/placeholder_project.jpg';
-    $company_name = !empty($setting['ten' . $lang]) ? $setting['ten' . $lang] : 'CƠ ĐIỆN LẠNH ĐỨC NHÂN';
-    $slogan_display = !empty($optsetting['slogan']) ? $optsetting['slogan'] : 'Tối ưu chi phí – Chuẩn chất lượng – An toàn – Cam kết tiến độ';
-    $hero_desc = !empty($gioithieu['mota' . $lang]) ? $gioithieu['mota' . $lang] : 'Chuyên cung cấp, thi công, lắp đặt, bảo trì, hệ thống cơ điện cho các công trình.';
+<?php
+    $stat_years = !empty($optsetting['stat_years']) ? $optsetting['stat_years'] : '10+ Năm';
+    $stat_years_label = !empty($optsetting['stat_years_label']) ? $optsetting['stat_years_label'] : 'Kinh nghiệm chuyên sâu ngành Panel';
+    $stat_projects = !empty($optsetting['stat_projects']) ? $optsetting['stat_projects'] : '650+';
+    $stat_projects_label = !empty($optsetting['stat_projects_label']) ? $optsetting['stat_projects_label'] : 'Dự án nhà xưởng & kho lạnh bàn giao';
+    $stat_quality = !empty($optsetting['stat_quality']) ? $optsetting['stat_quality'] : '100%';
+    $stat_quality_label = !empty($optsetting['stat_quality_label']) ? $optsetting['stat_quality_label'] : 'Đạt kiểm định cách nhiệt & PCCC';
+    $stat_team = !empty($optsetting['stat_team']) ? $optsetting['stat_team'] : '60+';
+    $stat_team_label = !empty($optsetting['stat_team_label']) ? $optsetting['stat_team_label'] : 'Kỹ sư & đội thợ thi công chuyên nghiệp';
+
+    // Parse options for About Us
+    $about_opt = !empty($gioithieu['options']) ? json_decode($gioithieu['options'], true) : [];
+    $about_features = $about_opt['features'] ?? [
+        ['title' => 'Chống Nóng & Cách Âm', 'desc' => 'Hệ số dẫn nhiệt cực thấp, giảm 65% nhiệt lượng môi trường.'],
+        ['title' => 'Chống Cháy Lan Đạt Chuẩn', 'desc' => 'Panel Rockwool đạt cấp chống cháy EI60 - EI120 chuẩn PCCC.'],
+        ['title' => 'Thi Công Siêu Nhanh', 'desc' => 'Lắp ghép dạng module ngàm Z-lock, rút ngắn 2/3 thời gian thi công.'],
+        ['title' => 'Thân Thiện Môi Trường', 'desc' => 'Dễ dàng tháo dỡ, mở rộng quy mô, tái sử dụng đến 95% vật liệu.']
+    ];
+    $badge_title = $about_opt['badge_title'] ?? 'Sáng Tạo EcoPanel';
+    $badge_desc = $about_opt['badge_desc'] ?? 'Cam kết chất lượng - Tiến độ chuẩn xác - Giá thành gốc tại xưởng sản xuất.';
+    $founder_name = $about_opt['founder_name'] ?? 'Nguyễn Thanh Tuyền';
+    $founder_title = $about_opt['founder_title'] ?? 'Đại Diện Điều Hành & Quản Lý Kỹ Thuật';
 ?>
-<style>
-/* Project Carousel */
-.duan-carousel {
-    position: relative;
-    width: 100%;
-}
 
-.duan-viewport {
-    overflow: hidden;
-    width: 100%;
-    position: relative;
-    cursor: grab;
-    user-select: none;
-    -webkit-user-select: none;
-    touch-action: pan-y;
-}
-.duan-viewport:active,
-.duan-viewport.is-dragging {
-    cursor: grabbing;
-}
-
-.duan-item,
-.duan-item * {
-    -webkit-user-drag: none;
-    user-drag: none;
-}
-
-.duan-track {
-    display: flex;
-    transition: transform 0.36s cubic-bezier(0.22, 1, 0.36, 1);
-    will-change: transform;
-    margin: 0;
-    padding: 4px 0 10px 0;
-}
-
-/* 4 items per page on desktop */
-.duan-item {
-    flex: 0 0 calc((100% - 3 * 15px) / 4);
-    max-width: calc((100% - 3 * 15px) / 4);
-    min-width: calc((100% - 3 * 15px) / 4);
-    margin-right: 15px;
-    box-sizing: border-box;
-}
-.duan-item:last-child {
-    margin-right: 0;
-}
-
-/* Responsive columns & Media Queries */
-.duan-item .card {
-    border-radius: 12px !important;
-    border: 1px solid #dcdcdc !important;
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
-    display: flex !important;
-    flex-direction: column !important;
-    height: 100% !important;
-    background-color: #ffffff !important;
-    overflow: hidden !important;
-}
-.duan-item .card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12) !important;
-}
-.duan-item .duan-img-wrap {
-    position: relative;
-    display: block;
-    width: 100%;
-    height: 185px;
-    overflow: hidden;
-    background-color: #f1f5f9;
-    border-top-left-radius: 11px;
-    border-top-right-radius: 11px;
-}
-.duan-item .card-img-top {
-    width: 100% !important;
-    height: 100% !important;
-    min-height: 100% !important;
-    max-height: 100% !important;
-    object-fit: cover !important;
-    object-position: center !important;
-    display: block !important;
-    transition: transform 0.4s ease;
-}
-.duan-item .card:hover .card-img-top {
-    transform: scale(1.08);
-}
-.duan-zoom-btn {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    width: 34px;
-    height: 34px;
-    border-radius: 50%;
-    background: rgba(14, 83, 128, 0.85);
-    color: #ffffff !important;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 13px;
-    opacity: 0;
-    transform: scale(0.8);
-    transition: all 0.25s ease;
-    z-index: 5;
-    text-decoration: none !important;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-    cursor: pointer;
-}
-.duan-item .card:hover .duan-zoom-btn {
-    opacity: 1;
-    transform: scale(1);
-}
-.duan-zoom-btn:hover {
-    background: #e53935 !important;
-    transform: scale(1.15) !important;
-    color: #ffffff !important;
-}
-.duan-item .card-body {
-    flex: 1 1 auto;
-    display: flex !important;
-    align-items: center !important;
-    padding: 12px 14px !important;
-    min-height: 66px !important;
-    height: 66px !important;
-    max-height: 66px !important;
-    background-color: #ffffff;
-    border-top: 1px solid #f0f0f0;
-    box-sizing: border-box;
-}
-.duan-item .card-title {
-    font-size: 14px !important;
-    line-height: 1.35 !important;
-    font-weight: 700 !important;
-    margin: 0 !important;
-    width: 100%;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-.duan-item .card-title a {
-    color: #0e5380 !important;
-    font-weight: 700 !important;
-    text-decoration: none !important;
-    transition: color 0.2s ease;
-}
-.duan-item .card-title a:hover {
-    color: #e53935 !important;
-}
-
-@media (max-width: 1199px) and (min-width: 992px) {
-    .duan-item {
-        flex: 0 0 calc((100% - 3 * 14px) / 4);
-        max-width: calc((100% - 3 * 14px) / 4);
-        min-width: calc((100% - 3 * 14px) / 4);
-        margin-right: 14px;
-    }
-    .duan-item .duan-img-wrap,
-    .duan-item .card-img-top {
-        height: 165px !important;
-        min-height: 165px !important;
-        max-height: 165px !important;
-    }
-    .duan-item .card-body {
-        height: 64px !important;
-        min-height: 64px !important;
-    }
-}
-
-@media (max-width: 991px) and (min-width: 768px) {
-    .duan-item {
-        flex: 0 0 calc((100% - 2 * 14px) / 3);
-        max-width: calc((100% - 2 * 14px) / 3);
-        min-width: calc((100% - 2 * 14px) / 3);
-        margin-right: 14px;
-    }
-    .duan-item .duan-img-wrap,
-    .duan-item .card-img-top {
-        height: 160px !important;
-        min-height: 160px !important;
-        max-height: 160px !important;
-    }
-    .duan-nav-prev { left: -14px; }
-    .duan-nav-next { right: -14px; }
-}
-
-@media (max-width: 767px) and (min-width: 576px) {
-    .duan-item {
-        flex: 0 0 calc((100% - 12px) / 2);
-        max-width: calc((100% - 12px) / 2);
-        min-width: calc((100% - 12px) / 2);
-        margin-right: 12px;
-    }
-    .duan-item .duan-img-wrap,
-    .duan-item .card-img-top {
-        height: 155px !important;
-        min-height: 155px !important;
-        max-height: 155px !important;
-    }
-    .duan-nav-btn {
-        width: 32px;
-        height: 32px;
-        font-size: 12px;
-    }
-    .duan-nav-prev { left: -10px; }
-    .duan-nav-next { right: -10px; }
-}
-
-@media (max-width: 575px) {
-    .category-block {
-        padding: 18px 12px !important;
-        border-radius: 10px !important;
-    }
-    .duan-item {
-        flex: 0 0 calc(100% - 10px);
-        max-width: calc(100% - 10px);
-        min-width: calc(100% - 10px);
-        margin-right: 10px;
-    }
-    .duan-item .duan-img-wrap,
-    .duan-item .card-img-top {
-        height: 190px !important;
-        min-height: 190px !important;
-        max-height: 190px !important;
-    }
-    .duan-nav-btn {
-        display: none !important;
-    }
-    .duan-pagination {
-        margin-top: 16px;
-    }
-}
-
-/* NAVIGATION ARROWS */
-.duan-nav-btn {
-    position: absolute;
-    top: 50%;
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
-    background-color: #0e5380;
-    color: #ffffff;
-    border: 2px solid #ffffff;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    z-index: 10;
-    transition: all 0.25s ease;
-    outline: none;
-    transform: translateY(-50%);
-}
-.duan-nav-prev {
-    left: -19px;
-}
-.duan-nav-next {
-    right: -19px;
-}
-.duan-nav-btn:hover {
-    background-color: #e53935;
-    color: #ffffff;
-    transform: translateY(-50%) scale(1.1);
-}
-.duan-nav-btn.disabled,
-.duan-nav-btn:disabled {
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-}
-
-/* Pagination */
-.duan-pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 22px;
-    width: 100%;
-}
-.duan-dots-container {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    gap: 12px;
-    padding: 6px 14px;
-    background: rgba(14, 83, 128, 0.06);
-    border-radius: 20px;
-}
-
-/* Inactive Small Dots */
-.duan-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background-color: #cbd5e1;
-    cursor: pointer;
-    transition: background-color 0.25s ease, transform 0.2s ease;
-    flex-shrink: 0;
-    display: block;
-}
-.duan-dot:hover {
-    background-color: #94a3b8;
-    transform: scale(1.2);
-}
-
-/* Active Dot */
-.duan-dot-active {
-    position: absolute;
-    top: 50%;
-    left: 14px;
-    height: 10px;
-    width: 10px;
-    border-radius: 5px;
-    background: linear-gradient(135deg, #0e5380 0%, #1a6d9e 100%);
-    box-shadow: 0 2px 6px rgba(14, 83, 128, 0.4);
-    pointer-events: none;
-    z-index: 2;
-    transform: translateY(-50%);
-    transition: left 0.38s cubic-bezier(0.34, 1.56, 0.64, 1),
-                width 0.22s cubic-bezier(0.4, 0, 0.2, 1),
-                border-radius 0.22s ease,
-                transform 0.38s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-/* Fluid Stretch when moving */
-.duan-dot-active.is-stretching {
-    width: 22px;
-    border-radius: 5px;
-}
-
-/* When pagination is hidden (<= 4 items) */
-.duan-carousel.no-pagination .duan-pagination,
-.duan-carousel.no-pagination .duan-nav-btn {
-    display: none !important;
-}
-
-/* Partner Card */
-.partner-card-box {
-    background-color: #ebf0f5 !important;
-    border-radius: 8px !important;
-    height: 90px;
-    padding: 10px 18px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: none !important;
-    box-shadow: none !important;
-    transition: transform 0.2s ease;
-}
-.partner-card-box:hover {
-    transform: translateY(-2px);
-}
-.partner-card-box img {
-    max-height: 70px;
-    width: 100%;
-    object-fit: contain;
-    display: block;
-}
-
-/* HERO BANNER RESPONSIVE OVERLAY */
-.hero-section {
-    position: relative;
-    background-size: cover !important;
-    background-position: center right !important;
-}
-.hero-section::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(90deg, rgba(255,255,255,0.92) 0%, rgba(255,255,255,0.85) 50%, rgba(255,255,255,0.4) 100%);
-    pointer-events: none;
-    z-index: 1;
-}
-.hero-section .fixwidth {
-    position: relative;
-    z-index: 2;
-}
-
-@media (max-width: 991px) {
-    .hero-section {
-        min-height: 400px !important;
-        padding-top: 45px !important;
-        padding-bottom: 70px !important;
-    }
-    .hero-section h1 {
-        font-size: 32px !important;
-    }
-    .hero-section h2 {
-        font-size: 19px !important;
-    }
-    .hero-section p {
-        font-size: 14px !important;
-    }
-}
-
-@media (max-width: 575px) {
-    .hero-section {
-        min-height: 340px !important;
-        padding-top: 30px !important;
-        padding-bottom: 50px !important;
-    }
-    .hero-section h1 {
-        font-size: 22px !important;
-        line-height: 1.25 !important;
-    }
-    .hero-section h2 {
-        font-size: 15px !important;
-        line-height: 1.35 !important;
-    }
-    .hero-section p {
-        font-size: 13px !important;
-        line-height: 1.5 !important;
-    }
-}
-
-/* STAT BADGE RESPONSIVE */
-@media (max-width: 767px) {
-    .stat-badge-wrapper {
-        margin-top: 15px !important;
-    }
-    .stat-badge-wrapper .row > div {
-        border-right: none !important;
-        border-bottom: 1px solid #f0f0f0;
-        padding-bottom: 12px;
-        margin-bottom: 12px;
-    }
-    .stat-badge-wrapper .row > div:last-child {
-        border-bottom: none !important;
-        padding-bottom: 0;
-        margin-bottom: 0;
-    }
-}
-</style>
-
-<!-- HERO BANNER SECTION -->
-<section class="hero-section position-relative" style="background: url('<?= $banner_img ?>') no-repeat center center / cover; min-height: 500px; padding-top: 75px; padding-bottom: 95px;">
-    <div class="fixwidth">
-        <div class="row align-items-center">
-            <div class="col-lg-7">
-                <h1 class="font-weight-bold mb-3" style="color: #0e5380; font-size: 46px; letter-spacing: 0.5px; font-family: 'Segoe UI', Roboto, sans-serif;">
-                    <?= $company_name ?>
-                </h1>
-                <h2 class="font-weight-bold mb-3" style="color: #0e5380; font-size: 23px; line-height: 1.3;">
-                    <?= $slogan_display ?>
-                </h2>
-                <p class="mb-4" style="color: #333333; font-size: 16px; font-weight: 500; line-height: 1.6; max-width: 580px;">
-                    <?= $hero_desc ?>
-                </p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- STAT BADGE CONTAINER -->
-<div class="fixwidth stat-badge-wrapper" style="margin-top: -65px; position: relative; z-index: 10;">
-    <div class="bg-white rounded shadow-sm p-4 border">
-        <div class="row text-center align-items-center">
-            <div class="col-md-4 border-right border-md-0 mb-3 mb-md-0">
-                <div class="d-flex align-items-center justify-content-center">
-                    <i class="fas fa-cog fa-2x mr-3" style="color: #0e5380;"></i>
-                    <div class="text-left">
-                        <span class="font-weight-bold h3 m-0 d-block" style="color: #0e5380;">19+</span>
-                        <span class="text-muted small font-weight-bold">Năm kinh nghiệm</span>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 border-right border-md-0 mb-3 mb-md-0">
-                <div class="d-flex align-items-center justify-content-center">
-                    <i class="fas fa-city fa-2x mr-3" style="color: #0e5380;"></i>
-                    <div class="text-left">
-                        <span class="font-weight-bold h3 m-0 d-block" style="color: #0e5380;">88+</span>
-                        <span class="text-muted small font-weight-bold">Dự án đã triển khai</span>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="d-flex align-items-center justify-content-center">
-                    <i class="fas fa-users fa-2x mr-3" style="color: #0e5380;"></i>
-                    <div class="text-left">
-                        <span class="font-weight-bold h3 m-0 d-block" style="color: #0e5380;">97+</span>
-                        <span class="text-muted small font-weight-bold">Kỹ sư & kỹ thuật viên</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- SECTION DỰ ÁN TIÊU BIỂU -->
-<section class="section_duan py-5 bg-white">
-    <div class="fixwidth">
-        <!-- TITLE WITH RED VERTICAL BAR -->
-        <div class="d-flex align-items-center mb-4">
-            <span class="mr-2 font-weight-bold h3" style="color: #e53935; font-size: 26px;">|</span>
-            <h2 class="font-weight-bold text-uppercase m-0" style="color: #0e5380; font-size: 22px;">DỰ ÁN TIÊU BIỂU</h2>
-        </div>
-
-        <?php
-        $groupedProjects = [];
-        if (!empty($duan) && is_array($duan)) {
-            foreach ($duan as $v) {
-                $rawCatName = !empty($v['mota' . $lang]) ? trim($v['mota' . $lang]) : 'CÔNG NGHIỆP';
-                $catName = htmlspecialchars_decode($rawCatName);
-                $groupedProjects[$catName][] = $v;
-            }
-        }
-
-        foreach ($groupedProjects as $catName => $catGroup) {
-            $cat_count = count($catGroup);
-            $has_more_than_4 = ($cat_count > 4);
-            $total_pages = ceil($cat_count / 4);
-        ?>
-        <!-- CATEGORY CONTAINER WITH LIGHT BLUE BACKGROUND (#f2f6fa) -->
-        <div class="category-block mb-5 p-4 rounded-lg" style="background-color: #f2f6fa; border-radius: 12px;">
-            <div class="mb-4">
-                <span class="badge px-4 py-2 text-white font-weight-bold text-uppercase" style="background-color: #0e5380; font-size: 14px; border-radius: 4px;">
-                    <?= htmlspecialchars_decode($catName) ?>
-                </span>
-            </div>
-
-            <div class="duan-carousel <?= $has_more_than_4 ? 'has-pagination' : 'no-pagination' ?>" data-total="<?= $cat_count ?>">
-                <?php if ($has_more_than_4) { ?>
-                <button type="button" class="duan-nav-btn duan-nav-prev" aria-label="Trang trước"><i class="fas fa-chevron-left"></i></button>
-                <?php } ?>
-
-                <div class="duan-viewport">
-                    <div class="duan-track">
-                        <?php foreach ($catGroup as $v) { 
-                            $photo_file = $v['photo'] ?? '';
-                            $photo_url = (!empty($photo_file) && file_exists(UPLOAD_NEWS_L . $photo_file)) ? UPLOAD_NEWS_L . $photo_file : $placeholder_img;
-                            $ten_display = htmlspecialchars_decode($v['ten' . $lang] ?? ($v['tenvi'] ?? ''));
-                            $link_display = $v['tenkhongdauvi'] ?? '#';
-                        ?>
-                        <div class="duan-item">
-                            <div class="card h-100 bg-white shadow-sm overflow-hidden" style="border-radius: 12px; border: 1px solid #dcdcdc !important;">
-                                <div class="duan-img-wrap position-relative">
-                                    <a href="<?= $link_display ?>" class="d-block w-100 h-100 overflow-hidden" title="<?= htmlspecialchars($ten_display) ?>">
-                                        <img onerror="this.src='<?= $placeholder_img ?>';"
-                                             src="<?= $photo_url ?>"
-                                             class="card-img-top w-100" alt="<?= htmlspecialchars($ten_display) ?>">
-                                    </a>
-                                    <a data-fancybox="gallery-duan" data-caption="<?= htmlspecialchars($ten_display) ?>" href="<?= $photo_url ?>" class="duan-zoom-btn" title="Phóng to ảnh">
-                                        <i class="fas fa-search-plus"></i>
-                                    </a>
-                                </div>
-                                <div class="card-body p-3 bg-white text-left">
-                                    <h3 class="card-title font-weight-bold m-0">
-                                        <a href="<?= $link_display ?>"><?= $ten_display ?></a>
-                                    </h3>
-                                </div>
-                            </div>
-                        </div>
-                        <?php } ?>
-                    </div>
-                </div>
-
-                <?php if ($has_more_than_4) { ?>
-                <button type="button" class="duan-nav-btn duan-nav-next" aria-label="Trang tiếp theo"><i class="fas fa-chevron-right"></i></button>
-
-                <div class="duan-pagination">
-                    <div class="duan-dots-container">
-                        <?php for ($p = 0; $p < $total_pages; $p++) { ?>
-                        <span class="duan-dot" data-page="<?= $p ?>" title="Trang <?= $p + 1 ?>"></span>
-                        <?php } ?>
-                        <span class="duan-dot-active"></span>
-                    </div>
-                </div>
-                <?php } ?>
-            </div>
-        </div>
-        <?php } ?>
-    </div>
-</section>
-
-<!-- ĐỐI TÁC -->
-<section class="section_doitac pt-4 pb-2 bg-white">
-    <div class="fixwidth text-center">
-        <h2 class="font-weight-bold text-uppercase m-0 d-inline-block" style="color: #0e5380; font-size: 26px; font-weight: 800; letter-spacing: 0.5px; position: relative; padding-bottom: 8px;">
-            ĐỐI TÁC
-            <span style="position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 44px; height: 3px; background-color: #e53935; border-radius: 2px;"></span>
-        </h2>
-        
-        <div class="row justify-content-center align-items-center mt-4">
-            <?php if (!empty($doitac) && count($doitac) > 0) { 
-                foreach ($doitac as $k => $v) { 
-                    $p_img = (!empty($v['photo']) && file_exists(UPLOAD_PHOTO_L . $v['photo'])) ? UPLOAD_PHOTO_L . $v['photo'] : 'assets/images/noimage.png';
-                    $p_link = !empty($v['link']) ? $v['link'] : 'javascript:void(0)';
-                    $p_target = !empty($v['link']) ? 'target="_blank"' : '';
-            ?>
-            <div class="col-6 col-md-4 col-lg-3 mb-4">
-                <a href="<?= $p_link ?>" <?= $p_target ?> class="partner-card-box d-flex align-items-center justify-content-center text-decoration-none">
-                    <img onerror="this.src='assets/images/noimage.png';" src="<?= $p_img ?>" alt="<?= htmlspecialchars(htmlspecialchars_decode($v['ten' . $lang] ?? 'Đối tác')) ?>">
+<!-- Slide Banner & Stats -->
+<section class="hero-slider-section" id="trang-chu" aria-label="Banner nổi bật và năng lực">
+  <div class="hero-slider-container">
+    <?php if (!empty($slider) && count($slider) > 0) { ?>
+      <?php foreach ($slider as $k => $v) { 
+          $s_opt = !empty($v['options']) ? json_decode($v['options'], true) : [];
+          $s_tag = $s_opt['tag'] ?? 'Giải Pháp Xanh - Tiết Kiệm Năng Lượng';
+          $s_icon = $s_opt['icon'] ?? 'fa-solid fa-leaf';
+          $s_img = (!empty($v['photo']) && file_exists(UPLOAD_PHOTO_L . $v['photo'])) 
+                    ? UPLOAD_PHOTO_L . $v['photo'] 
+                    : (file_exists('assets/images/' . $v['photo']) ? 'assets/images/' . $v['photo'] : 'assets/images/slider-1.jpg');
+      ?>
+        <div class="slide <?= ($k == 0) ? 'active' : '' ?>">
+          <div class="slide-bg" style="background-image: url('<?= $s_img ?>');"></div>
+          <div class="slide-overlay"></div>
+          <div class="container slide-content-wrap">
+            <div class="slide-content">
+              <div class="slide-tag">
+                <i class="<?= $s_icon ?>" aria-hidden="true"></i> <?= $s_tag ?>
+              </div>
+              <?php if ($k == 0) { ?>
+                <h1 class="slide-title"><?= htmlspecialchars_decode($v['ten' . $lang]) ?></h1>
+              <?php } else { ?>
+                <div class="slide-title"><?= htmlspecialchars_decode($v['ten' . $lang]) ?></div>
+              <?php } ?>
+              <p class="slide-desc"><?= htmlspecialchars_decode($v['mota' . $lang]) ?></p>
+              <div class="slide-btns">
+                <button type="button" class="btn btn-primary btn-lg open-quote-modal">
+                  <i class="fa-solid fa-phone" aria-hidden="true"></i> Nhận Báo Giá Trực Tiếp
+                </button>
+                <a href="<?= !empty($v['link']) ? $v['link'] : '#du-an' ?>" class="btn btn-outline-white btn-lg">
+                  <i class="fa-solid fa-building-circle-check" aria-hidden="true"></i> Xem Dự Án Mẫu
                 </a>
+              </div>
             </div>
-            <?php } } else { ?>
-            <?php for ($i = 1; $i <= 8; $i++) { ?>
-            <div class="col-6 col-md-4 col-lg-3 mb-4">
-                <div class="partner-card-box">
-                    <img src="assets/images/doitac/partner_<?= $i ?>.png" alt="Đối tác <?= $i ?>">
-                </div>
-            </div>
-            <?php } ?>
-            <?php } ?>
+          </div>
         </div>
+      <?php } ?>
+    <?php } else { ?>
+      <!-- Fallback Default Slide -->
+      <div class="slide active">
+        <div class="slide-bg" style="background-image: url('assets/images/slider-1.jpg');"></div>
+        <div class="slide-overlay"></div>
+        <div class="container slide-content-wrap">
+          <div class="slide-content">
+            <div class="slide-tag"><i class="fa-solid fa-leaf"></i> Giải Pháp Xanh - Tiết Kiệm Năng Lượng</div>
+            <h1 class="slide-title">Thiết Kế &amp; Thi Công <span>Nhà Lắp Ghép</span> - Nhà Xưởng Panel Hiện Đại</h1>
+            <p class="slide-desc">Sáng Tạo EcoPanel - Nguyễn Thanh Tuyền mang đến giải pháp thi công panel cách nhiệt, chống nóng, chống cháy toàn diện.</p>
+            <div class="slide-btns">
+              <button type="button" class="btn btn-primary btn-lg open-quote-modal"><i class="fa-solid fa-phone"></i> Nhận Báo Giá Trực Tiếp</button>
+              <a href="#du-an" class="btn btn-outline-white btn-lg"><i class="fa-solid fa-building-circle-check"></i> Xem Dự Án Mẫu</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    <?php } ?>
+
+    <!-- Slider Controls -->
+    <button class="slider-arrow slider-prev" aria-label="Slide trước"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i></button>
+    <button class="slider-arrow slider-next" aria-label="Slide sau"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+
+    <div class="slider-dots" role="tablist" aria-label="Chuyển slide">
+      <?php for ($i = 0; $i < max(count($slider), 1); $i++) { ?>
+        <div class="slider-dot <?= ($i == 0) ? 'active' : '' ?>" role="tab" aria-selected="<?= ($i == 0) ? 'true' : 'false' ?>" aria-label="Slide <?= ($i + 1) ?>"></div>
+      <?php } ?>
     </div>
+  </div>
+
+  <!-- Stats Bar -->
+  <aside class="hero-stats-bar" aria-label="Thống kê số liệu năng lực">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-icon"><i class="fa-solid fa-award" aria-hidden="true"></i></div>
+          <div class="stat-info">
+            <div class="stat-number"><?= $stat_years ?></div>
+            <div class="stat-label"><?= $stat_years_label ?></div>
+          </div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-icon"><i class="fa-solid fa-city" aria-hidden="true"></i></div>
+          <div class="stat-info">
+            <div class="stat-number"><?= $stat_projects ?></div>
+            <div class="stat-label"><?= $stat_projects_label ?></div>
+          </div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-icon"><i class="fa-solid fa-square-check" aria-hidden="true"></i></div>
+          <div class="stat-info">
+            <div class="stat-number"><?= $stat_quality ?></div>
+            <div class="stat-label"><?= $stat_quality_label ?></div>
+          </div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-icon"><i class="fa-solid fa-users-gear" aria-hidden="true"></i></div>
+          <div class="stat-info">
+            <div class="stat-number"><?= $stat_team ?></div>
+            <div class="stat-label"><?= $stat_team_label ?></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
 </section>
 
-<div class="fixwidth my-4">
-    <div style="border-top: 2px solid #e53935; width: 100%; opacity: 0.85;"></div>
-</div>
+<!-- Giới thiệu -->
+<section class="section section-bg-white" id="gioi-thieu" aria-labelledby="about-heading">
+  <div class="container">
+    <div class="about-grid">
+      <!-- Cột hình ảnh năng lực -->
+      <figure class="about-images-wrapper">
+        <?php
+          $about_img = (!empty($gioithieu['photo']) && file_exists(UPLOAD_STATIC_L . $gioithieu['photo']))
+              ? UPLOAD_STATIC_L . $gioithieu['photo']
+              : (file_exists('assets/images/about-factory.jpg') ? 'assets/images/about-factory.jpg' : 'assets/images/noimage.png');
+        ?>
+        <img src="<?= $about_img ?>" alt="Nhà máy và quy trình thi công Sáng Tạo EcoPanel - Nguyễn Thanh Tuyền" class="about-main-img" onerror="this.src='assets/images/noimage.png';">
+        <figcaption class="about-sub-badge">
+          <div class="badge-icon"><i class="fa-solid fa-shield-heart" aria-hidden="true"></i></div>
+          <h4><?= $badge_title ?></h4>
+          <p><?= $badge_desc ?></p>
+        </figcaption>
+      </figure>
 
-<!-- CTA BANNER -->
-<section class="section_cta py-5 text-white" style="background: url('<?= $cta_img ?>') no-repeat center center / cover; min-height: 290px;">
-    <div class="fixwidth py-3">
-        <div class="row align-items-center">
-            <div class="col-lg-8">
-                <h2 class="font-weight-bold text-uppercase mb-2 text-white" style="font-size: 28px; font-weight: 800; letter-spacing: 0.5px; line-height: 1.3;">
-                    BẠN ĐANG TÌM NHÀ THẦU CƠ ĐIỆN CHO DỰ ÁN?
-                </h2>
-                <p class="mb-4 lead text-white" style="font-size: 16px; opacity: 0.95;">
-                    Hãy để chúng tôi đồng hành cùng bạn với chi phí hợp lý và chất lượng tốt nhất
-                </p>
-                <div class="d-flex align-items-center flex-wrap">
-                    <a href="lien-he" class="btn font-weight-bold text-white text-uppercase px-4 py-3 mr-3 mb-2 mb-sm-0 text-decoration-none" style="background-color: #e53935; border: none; border-radius: 6px; font-size: 14px; letter-spacing: 0.5px;">
-                        YÊU CẦU BÁO GIÁ <i class="fas fa-arrow-right ml-2"></i>
-                    </a>
-                    <a href="gioi-thieu" class="btn font-weight-bold text-white text-uppercase px-4 py-3 mb-2 mb-sm-0 text-decoration-none" style="border: 2px solid #ffffff; background: transparent; border-radius: 6px; font-size: 14px; letter-spacing: 0.5px;">
-                        XEM HỒ SƠ NĂNG LỰC <i class="fas fa-arrow-right ml-2"></i>
-                    </a>
-                </div>
-            </div>
+      <!-- Cột nội dung giới thiệu -->
+      <article class="about-content">
+        <div class="section-badge">
+          <i class="fa-solid fa-circle-info" aria-hidden="true"></i> Về chúng tôi
         </div>
+        <h2 class="section-title" id="about-heading">
+          <?= !empty($gioithieu['ten' . $lang]) ? htmlspecialchars_decode($gioithieu['ten' . $lang]) : 'Đối Tác Tin Cậy Về <span>Nhà Lắp Ghép &amp; Panel</span> Hàng Đầu' ?>
+        </h2>
+        <div class="about-lead">
+          <?= !empty($gioithieu['mota' . $lang]) ? htmlspecialchars_decode($gioithieu['mota' . $lang]) : '<strong>Sáng Tạo EcoPanel (Nguyễn Thanh Tuyền)</strong> tự hào là thương hiệu tiên phong chuyên sản xuất, phân phối tấm panel cách nhiệt và tổng thầu thi công nhà lắp ghép, nhà xưởng, kho lạnh uy tín tại miền Nam và toàn quốc.' ?>
+        </div>
+        <div class="about-desc">
+          <?= !empty($gioithieu['noidung' . $lang]) ? htmlspecialchars_decode($gioithieu['noidung' . $lang]) : 'Với dây chuyền sản xuất đồng bộ công nghệ hiện đại cùng đội ngũ kỹ sư nhiệt huyết, chúng tôi cam kết mang tới những giải pháp kiến trúc xanh, tiết kiệm năng lượng điện, rút ngắn tối đa thời gian xây dựng và tối ưu ngân sách cho các chủ đầu tư.' ?>
+        </div>
+
+        <ul class="about-features-list">
+          <?php foreach ($about_features as $af) { ?>
+            <li class="about-feature-item">
+              <div class="about-feature-icon"><i class="fa-solid fa-check" aria-hidden="true"></i></div>
+              <div>
+                <h5><?= $af['title'] ?></h5>
+                <p><?= $af['desc'] ?></p>
+              </div>
+            </li>
+          <?php } ?>
+        </ul>
+
+        <div class="about-actions">
+          <button type="button" class="btn btn-primary open-quote-modal">
+            <i class="fa-solid fa-handshake" aria-hidden="true"></i> Nhận Hồ Sơ Năng Lực
+          </button>
+          <div class="about-founder">
+            <div class="founder-info">
+              <h5><?= $founder_name ?></h5>
+              <span><?= $founder_title ?></span>
+            </div>
+          </div>
+        </div>
+      </article>
     </div>
+  </div>
 </section>
 
-<!-- Carousel Script -->
-<script type="text/javascript">
-(function() {
-    class DuanSlider {
-        constructor(wrapper) {
-            this.wrapper = wrapper;
-            this.viewport = wrapper.querySelector('.duan-viewport');
-            this.track = wrapper.querySelector('.duan-track');
-            this.items = Array.from(wrapper.querySelectorAll('.duan-item'));
-            this.prevBtn = wrapper.querySelector('.duan-nav-prev');
-            this.nextBtn = wrapper.querySelector('.duan-nav-next');
-            this.paginationWrapper = wrapper.querySelector('.duan-pagination');
-            this.dotsContainer = wrapper.querySelector('.duan-dots-container');
-            this.activeDot = wrapper.querySelector('.duan-dot-active');
+<!-- Sản phẩm -->
+<section class="section section-bg-subtle" id="panel" aria-labelledby="panel-heading">
+  <div class="container">
+    <header class="section-header">
+      <div class="section-badge">
+        <i class="fa-solid fa-layer-group" aria-hidden="true"></i> Sản phẩm chính hãng
+      </div>
+      <h2 class="section-title" id="panel-heading">
+        Hệ Thống <span>Tấm Panel Cách Nhiệt</span> Đạt Chuẩn
+      </h2>
+      <p class="section-desc">
+        Đa dạng các chủng loại tấm Panel lõi xốp EPS, PU/PIR, Bông khoáng Rockwool, Bông thủy tinh và phụ kiện nhôm định hình cao cấp phục vụ mọi quy mô công trình.
+      </p>
+    </header>
 
-            this.totalItems = this.items.length;
-            this.currentPage = 0;
-            this.totalPages = 1;
-            this.itemsPerPage = 4;
-            this.currentOffset = 0;
+    <!-- Filter Tabs -->
+    <nav class="filter-tabs-wrapper" aria-label="Bộ lọc phân loại panel">
+      <button class="tab-btn active" data-filter="all">Tất cả sản phẩm</button>
+      <?php if (!empty($danhmuc_list)) { foreach ($danhmuc_list as $dm) { ?>
+        <button class="tab-btn" data-filter="<?= $dm['tenkhongdauvi'] ?>"><?= $dm['ten' . $lang] ?></button>
+      <?php } } ?>
+    </nav>
 
-            // Autoplay states
-            this.autoplayTimer = null;
-            this.autoplayDelay = 3500; // 3.5 seconds per slide
-            this.isHovered = false;
-
-            // Drag / Swipe states
-            this.isDragging = false;
-            this.startX = 0;
-            this.currentX = 0;
-            this.startTranslate = 0;
-            this.dragPreventClick = false;
-            this.stretchTimer = null;
-
-            this.init();
-        }
-
-        getItemsPerPage() {
-            const w = window.innerWidth;
-            if (w < 576) return 1;
-            if (w < 768) return 2;
-            if (w < 992) return 3;
-            return 4;
-        }
-
-        init() {
-            if (!this.viewport || !this.track || this.totalItems === 0) return;
-            this.updateDimensions();
-            this.bindEvents();
-            this.bindTouchAndDrag();
-
-            // Initial positioning of active dot
-            setTimeout(() => {
-                this.updateDimensions();
-                this.syncActiveDot(false);
-                this.startAutoplay();
-            }, 100);
-
-            window.addEventListener('load', () => {
-                this.updateDimensions();
-                this.syncActiveDot(false);
-                this.startAutoplay();
-            });
-        }
-
-        startAutoplay() {
-            this.stopAutoplay();
-            if (this.totalPages <= 1 || this.isDragging || this.isHovered) return;
-            this.autoplayTimer = setInterval(() => {
-                if (this.totalPages <= 1 || this.isDragging || this.isHovered) return;
-                let nextPage = this.currentPage + 1;
-                if (nextPage >= this.totalPages) {
-                    nextPage = 0; // loop back to page 0
-                }
-                this.goToPage(nextPage, true);
-            }, this.autoplayDelay);
-        }
-
-        stopAutoplay() {
-            if (this.autoplayTimer) {
-                clearInterval(this.autoplayTimer);
-                this.autoplayTimer = null;
-            }
-        }
-
-        resetAutoplay() {
-            this.stopAutoplay();
-            this.startAutoplay();
-        }
-
-        updateDimensions() {
-            this.itemsPerPage = this.getItemsPerPage();
-            this.totalPages = Math.ceil(this.totalItems / this.itemsPerPage);
-
-            // Hide pagination completely if totalItems <= 4 or totalPages <= 1
-            if (this.totalItems <= 4 || this.totalPages <= 1) {
-                this.wrapper.classList.add('no-pagination');
-                if (this.paginationWrapper) this.paginationWrapper.style.display = 'none';
-                if (this.prevBtn) this.prevBtn.style.display = 'none';
-                if (this.nextBtn) this.nextBtn.style.display = 'none';
-                this.stopAutoplay();
-            } else {
-                this.wrapper.classList.remove('no-pagination');
-                if (this.paginationWrapper) this.paginationWrapper.style.display = 'flex';
-                if (this.prevBtn) this.prevBtn.style.display = 'flex';
-                if (this.nextBtn) this.nextBtn.style.display = 'flex';
-                this.renderDots();
-                this.startAutoplay();
-            }
-
-            if (this.currentPage >= this.totalPages) {
-                this.currentPage = Math.max(0, this.totalPages - 1);
-            }
-            this.goToPage(this.currentPage, false);
-        }
-
-        renderDots() {
-            if (!this.dotsContainer) return;
-            const currentDotCount = this.dotsContainer.querySelectorAll('.duan-dot').length;
-            if (currentDotCount !== this.totalPages) {
-                this.dotsContainer.innerHTML = '';
-                for (let i = 0; i < this.totalPages; i++) {
-                    const dot = document.createElement('span');
-                    dot.className = 'duan-dot';
-                    dot.setAttribute('data-page', i);
-                    dot.setAttribute('title', `Trang ${i + 1}`);
-                    this.dotsContainer.appendChild(dot);
-                }
-                const activeDot = document.createElement('span');
-                activeDot.className = 'duan-dot-active';
-                this.dotsContainer.appendChild(activeDot);
-                this.activeDot = activeDot;
-            } else {
-                if (!this.activeDot) {
-                    this.activeDot = this.dotsContainer.querySelector('.duan-dot-active');
-                }
-            }
-        }
-
-        getMaxOffset() {
-            return Math.max(0, this.track.scrollWidth - this.viewport.clientWidth);
-        }
-
-        getPageOffset(page) {
-            if (page <= 0) return 0;
-            const maxOffset = this.getMaxOffset();
-            if (page >= this.totalPages - 1) return maxOffset;
-            const targetIndex = page * this.itemsPerPage;
-            if (this.items[targetIndex]) {
-                return Math.min(this.items[targetIndex].offsetLeft, maxOffset);
-            }
-            return 0;
-        }
-
-        goToPage(page, animate = true) {
-            this.currentPage = Math.max(0, Math.min(page, this.totalPages - 1));
-            this.currentOffset = this.getPageOffset(this.currentPage);
-
-            if (animate) {
-                this.track.style.transition = 'transform 0.36s cubic-bezier(0.22, 1, 0.36, 1)';
-            } else {
-                this.track.style.transition = 'none';
-            }
-            this.track.style.transform = `translate3d(-${this.currentOffset}px, 0, 0)`;
-
-            this.updateNavButtons();
-            this.syncActiveDot(animate);
-        }
-
-        updateNavButtons() {
-            if (this.prevBtn) {
-                if (this.currentPage <= 0) {
-                    this.prevBtn.classList.add('disabled');
-                    this.prevBtn.disabled = true;
-                } else {
-                    this.prevBtn.classList.remove('disabled');
-                    this.prevBtn.disabled = false;
-                }
-            }
-            if (this.nextBtn) {
-                if (this.currentPage >= this.totalPages - 1) {
-                    this.nextBtn.classList.add('disabled');
-                    this.nextBtn.disabled = true;
-                } else {
-                    this.nextBtn.classList.remove('disabled');
-                    this.nextBtn.disabled = false;
-                }
-            }
-        }
-
-        syncActiveDot(animate = true) {
-            if (!this.dotsContainer || !this.activeDot) return;
-            const targetDot = this.dotsContainer.querySelector(`.duan-dot[data-page="${this.currentPage}"]`);
-            if (!targetDot) return;
-
-            const cRect = this.dotsContainer.getBoundingClientRect();
-            const dRect = targetDot.getBoundingClientRect();
-            const targetLeft = dRect.left - cRect.left;
-
-            if (animate) {
-                this.activeDot.style.transition = 'left 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), width 0.22s ease';
-                this.activeDot.classList.add('is-stretching');
-                this.activeDot.style.left = targetLeft + 'px';
-
-                clearTimeout(this.stretchTimer);
-                this.stretchTimer = setTimeout(() => {
-                    this.activeDot.classList.remove('is-stretching');
-                    this.activeDot.style.width = '10px';
-                }, 240);
-            } else {
-                this.activeDot.style.transition = 'none';
-                this.activeDot.style.left = targetLeft + 'px';
-                this.activeDot.style.width = '10px';
-                this.activeDot.offsetHeight; // force reflow
-            }
-        }
-
-        syncDotOnDrag(diff) {
-            if (!this.dotsContainer || !this.activeDot || this.totalPages <= 1) return;
-            const dots = this.dotsContainer.querySelectorAll('.duan-dot');
-            if (!dots.length) return;
-
-            const cRect = this.dotsContainer.getBoundingClientRect();
-            const curDot = dots[this.currentPage];
-            if (!curDot) return;
-
-            const curLeft = curDot.getBoundingClientRect().left - cRect.left;
-            const vpWidth = this.viewport.clientWidth || 1;
-            const progress = -diff / vpWidth; // negative when dragging left
-
-            let targetIndex = this.currentPage + (progress > 0 ? 1 : -1);
-            targetIndex = Math.max(0, Math.min(targetIndex, this.totalPages - 1));
-            const targetDot = dots[targetIndex];
-
-            if (targetDot) {
-                const targetLeft = targetDot.getBoundingClientRect().left - cRect.left;
-                const dist = targetLeft - curLeft;
-                const ratio = Math.min(1, Math.max(0, Math.abs(progress)));
-                const currentPos = curLeft + dist * ratio;
-                const stretchWidth = 10 + Math.abs(ratio) * 14;
-
-                this.activeDot.style.transition = 'none';
-                this.activeDot.style.left = currentPos + 'px';
-                this.activeDot.style.width = stretchWidth + 'px';
-            }
-        }
-
-        bindEvents() {
-            if (this.prevBtn) {
-                this.prevBtn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    if (this.currentPage > 0) this.goToPage(this.currentPage - 1, true);
-                    this.resetAutoplay();
-                });
-            }
-            if (this.nextBtn) {
-                this.nextBtn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    if (this.currentPage < this.totalPages - 1) this.goToPage(this.currentPage + 1, true);
-                    this.resetAutoplay();
-                });
-            }
-            if (this.dotsContainer) {
-                this.dotsContainer.addEventListener('click', (e) => {
-                    const dot = e.target.closest('.duan-dot');
-                    if (dot) {
-                        const page = parseInt(dot.getAttribute('data-page'), 10);
-                        if (!isNaN(page)) {
-                            this.goToPage(page, true);
-                            this.resetAutoplay();
-                        }
+    <!-- Product Cards Grid -->
+    <div class="products-grid">
+      <?php if (!empty($sanpham)) { foreach ($sanpham as $sp) {
+          $p_opt = !empty($sp['options']) ? json_decode($sp['options'], true) : [];
+          $p_cat = $p_opt['cat_slug'] ?? 'cach-nhiet';
+          $p_badge = $p_opt['badge'] ?? 'Bán chạy nhất';
+          $p_badge_cls = $p_opt['badge_class'] ?? '';
+          $p_specs = $p_opt['specs'] ?? [];
+          $p_img = (!empty($sp['photo']) && file_exists(UPLOAD_PRODUCT_L . $sp['photo']))
+                    ? UPLOAD_PRODUCT_L . $sp['photo']
+                    : (file_exists('assets/images/' . $sp['photo']) ? 'assets/images/' . $sp['photo'] : 'assets/images/noimage.png');
+      ?>
+        <article class="product-card" data-category="<?= $p_cat ?>">
+          <figure class="product-img-wrap">
+            <?php if (!empty($p_badge)) { ?>
+              <span class="product-badge <?= $p_badge_cls ?>"><?= $p_badge ?></span>
+            <?php } ?>
+            <img src="<?= $p_img ?>" alt="<?= $sp['ten' . $lang] ?>" onerror="this.src='assets/images/noimage.png';">
+          </figure>
+          <div class="product-body">
+            <div class="product-category">
+              <?php
+                if (!empty($danhmuc_list)) {
+                  foreach ($danhmuc_list as $dm) {
+                    if ($dm['id'] == $sp['id_list'] || $dm['tenkhongdauvi'] == $p_cat) {
+                      echo $dm['ten' . $lang];
+                      break;
                     }
-                });
-            }
-
-            // Pause autoplay on mouse hover
-            this.wrapper.addEventListener('mouseenter', () => {
-                this.isHovered = true;
-                this.stopAutoplay();
-            });
-            this.wrapper.addEventListener('mouseleave', () => {
-                this.isHovered = false;
-                this.startAutoplay();
-            });
-
-            // Pause on tab visibility change
-            document.addEventListener('visibilitychange', () => {
-                if (document.hidden) {
-                    this.stopAutoplay();
-                } else {
-                    this.startAutoplay();
+                  }
                 }
-            });
+              ?>
+            </div>
+            <h3 class="product-title"><?= $sp['ten' . $lang] ?></h3>
+            <div class="product-specs">
+              <?php if (!empty($p_specs) && is_array($p_specs)) { foreach ($p_specs as $label => $val) { ?>
+                <div class="spec-row"><span><?= $label ?></span><strong><?= $val ?></strong></div>
+              <?php } } else { ?>
+                <div class="spec-row"><span>Mô tả:</span><strong><?= $sp['mota' . $lang] ?></strong></div>
+              <?php } ?>
+            </div>
+            <footer class="product-footer">
+              <div>
+                <div class="product-price-label">Giá tại xưởng:</div>
+                <div class="product-price">Liên hệ báo giá tốt</div>
+              </div>
+              <button type="button" class="btn btn-primary btn-sm product-btn-quote open-quote-modal" aria-label="Yêu cầu báo giá <?= $sp['ten' . $lang] ?>">
+                <i class="fa-solid fa-cart-flatbed" aria-hidden="true"></i> Báo Giá
+              </button>
+            </footer>
+          </div>
+        </article>
+      <?php } } ?>
+    </div>
+  </div>
+</section>
 
-            let resizeTimer = null;
-            window.addEventListener('resize', () => {
-                clearTimeout(resizeTimer);
-                resizeTimer = setTimeout(() => {
-                    this.updateDimensions();
-                }, 80);
-            });
-        }
+<!-- Dịch vụ & Quy trình thi công -->
+<section class="section section-bg-white" id="thi-cong" aria-labelledby="services-heading">
+  <div class="container">
+    <header class="section-header">
+      <div class="section-badge">
+        <i class="fa-solid fa-helmet-safety" aria-hidden="true"></i> Dịch vụ thế mạnh
+      </div>
+      <h2 class="section-title" id="services-heading">
+        Giải Pháp <span>Thi Công Trọn Gói</span> Chuyên Nghiệp
+      </h2>
+      <p class="section-desc">
+        Sáng Tạo EcoPanel - Nguyễn Thanh Tuyền sở hữu đội ngũ thợ lành nghề, trang thiết bị cơ giới chuyên dụng, cam kết bàn giao đúng tiến độ và tiêu chuẩn kỹ thuật khắt khe.
+      </p>
+    </header>
 
-        bindTouchAndDrag() {
-            const vp = this.viewport;
-            let rafId = null;
-            let lastX = 0;
-            let lastTime = 0;
-            let velocityX = 0;
+    <div class="services-grid">
+      <?php if (!empty($dichvu)) { foreach ($dichvu as $dv) {
+          $dv_opt = !empty($dv['options']) ? json_decode($dv['options'], true) : [];
+          $dv_icon = $dv_opt['icon'] ?? 'fa-solid fa-industry';
+          $dv_checklist = $dv_opt['checklist'] ?? [];
+          $dv_img = (!empty($dv['photo']) && file_exists(UPLOAD_NEWS_L . $dv['photo']))
+                    ? UPLOAD_NEWS_L . $dv['photo']
+                    : (file_exists('assets/images/' . $dv['photo']) ? 'assets/images/' . $dv['photo'] : 'assets/images/noimage.png');
+      ?>
+        <article class="service-card">
+          <figure class="service-thumb">
+            <img src="<?= $dv_img ?>" alt="<?= $dv['ten' . $lang] ?>" onerror="this.src='assets/images/noimage.png';">
+            <div class="service-icon-floating"><i class="<?= $dv_icon ?>" aria-hidden="true"></i></div>
+          </figure>
+          <div class="service-content">
+            <h3 class="service-title"><?= $dv['ten' . $lang] ?></h3>
+            <p class="service-desc"><?= $dv['mota' . $lang] ?></p>
+            <ul class="service-checklist">
+              <?php foreach ($dv_checklist as $chk) { ?>
+                <li><i class="fa-solid fa-circle-check" aria-hidden="true"></i> <?= $chk ?></li>
+              <?php } ?>
+            </ul>
+            <a href="#lien-he" class="service-link">Tư vấn báo giá <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+          </div>
+        </article>
+      <?php } } ?>
+    </div>
 
-            // Prevent native ghost image drag
-            vp.addEventListener('dragstart', (e) => e.preventDefault());
+    <?php
+      $process_title = !empty($optsetting['process_title']) ? $optsetting['process_title'] : 'Quy Trình Thi Công 5 Bước Chuẩn Kỹ Thuật Tại Sáng Tạo EcoPanel';
+      $default_steps = [
+        ['num' => '01', 'title' => 'Tiếp Nhận &amp; Tư Vấn', 'desc' => 'Lắng nghe nhu cầu, quy mô diện tích và mục đích sử dụng công trình.'],
+        ['num' => '02', 'title' => 'Khảo Sát Hiện Trạng', 'desc' => 'Đội ngũ kỹ sư đo đạc thực tế mặt bằng, lên bản vẽ phối cảnh 2D/3D chi tiết.'],
+        ['num' => '03', 'title' => 'Báo Giá &amp; Hợp Đồng', 'desc' => 'Dự toán chi tiết, minh bạch không phát sinh chi phí, cam kết tiến độ.'],
+        ['num' => '04', 'title' => 'Sản Xuất &amp; Lắp Dựng', 'desc' => 'Gia công panel tại xưởng, vận chuyển tới công trường thi công an toàn.'],
+        ['num' => '05', 'title' => 'Nghiệm Thu &amp; Bảo Hành', 'desc' => 'Bàn giao công trình, kiểm tra cách nhiệt và kích hoạt bảo hành dài hạn.']
+      ];
+      $process_steps = (!empty($optsetting['process_steps']) && is_array($optsetting['process_steps'])) ? $optsetting['process_steps'] : $default_steps;
+    ?>
+    <!-- Quy trình thi công 5 bước -->
+    <section class="process-box" aria-label="Quy trình thi công 5 bước chuẩn hóa">
+      <header class="process-header">
+        <h3><?= $process_title ?></h3>
+      </header>
+      <ol class="process-steps-grid">
+        <?php foreach ($process_steps as $step) { ?>
+          <li class="process-step">
+            <div class="step-num-wrap"><?= $step['num'] ?></div>
+            <h5><?= $step['title'] ?></h5>
+            <p><?= $step['desc'] ?></p>
+          </li>
+        <?php } ?>
+      </ol>
+    </section>
+  </div>
+</section>
 
-            const onPointerDown = (e) => {
-                if (e.button !== 0 && e.pointerType === 'mouse') return;
-                if (this.totalPages <= 1) return;
+<!-- Dự án tiêu biểu -->
+<section class="section section-bg-subtle" id="du-an" aria-labelledby="projects-heading">
+  <div class="container">
+    <header class="section-header">
+      <div class="section-badge">
+        <i class="fa-solid fa-folder-open" aria-hidden="true"></i> Hồ sơ năng lực
+      </div>
+      <h2 class="section-title" id="projects-heading">
+        Dự Án <span>Tiêu Biểu Đã Hoàn Thành</span>
+      </h2>
+      <p class="section-desc">
+        Các công trình thực tế đã được Sáng Tạo EcoPanel - Nguyễn Thanh Tuyền trực tiếp sản xuất vật tư và tổng thầu thi công bàn giao cho khách hàng.
+      </p>
+    </header>
 
-                this.isDragging = true;
-                this.dragPreventClick = false;
-                this.startX = e.clientX;
-                this.currentX = e.clientX;
-                lastX = e.clientX;
-                lastTime = performance.now();
-                velocityX = 0;
-                this.startTranslate = -this.currentOffset;
+    <!-- Filter Tab cho Dự án -->
+    <nav class="filter-tabs-wrapper" aria-label="Bộ lọc loại hình dự án">
+      <button class="tab-btn active" data-filter="all">Tất cả dự án</button>
+      <button class="tab-btn" data-filter="nha-xuong">Nhà Xưởng</button>
+      <button class="tab-btn" data-filter="kho-lanh">Kho Lạnh</button>
+      <button class="tab-btn" data-filter="nha-o">Nhà Ở - Văn Phòng</button>
+      <button class="tab-btn" data-filter="du-an-khac">Dự Án Khác</button>
+    </nav>
 
-                this.stopAutoplay();
-                this.track.style.transition = 'none';
-                if (this.activeDot) this.activeDot.style.transition = 'none';
-                vp.classList.add('is-dragging');
+    <!-- Projects Grid -->
+    <div class="projects-grid">
+      <?php if (!empty($duan)) { foreach ($duan as $da) {
+          $da_opt = !empty($da['options']) ? json_decode($da['options'], true) : [];
+          $da_cat = $da_opt['cat'] ?? 'nha-xuong';
+          $da_tag = $da_opt['tag'] ?? 'Nhà Xưởng';
+          $da_area = $da_opt['area'] ?? '10.000 m²';
+          $da_time = $da_opt['time'] ?? '30 Ngày';
+          $da_img = (!empty($da['photo']) && file_exists(UPLOAD_NEWS_L . $da['photo']))
+                    ? UPLOAD_NEWS_L . $da['photo']
+                    : (file_exists('assets/images/' . $da['photo']) ? 'assets/images/' . $da['photo'] : 'assets/images/noimage.png');
+      ?>
+        <article class="project-card" data-category="<?= $da_cat ?>">
+          <img src="<?= $da_img ?>" alt="<?= $da['ten' . $lang] ?>" class="project-bg-img" onerror="this.src='assets/images/noimage.png';">
+          <div class="project-overlay">
+            <span class="project-tag"><?= $da_tag ?></span>
+            <h3 class="project-title"><?= $da['ten' . $lang] ?></h3>
+            <div class="project-meta">
+              <span><i class="fa-solid fa-map-pin" aria-hidden="true"></i> <?= !empty($da['diachi']) ? $da['diachi'] : 'TP. HCM' ?></span>
+              <span><i class="fa-solid fa-ruler-combined" aria-hidden="true"></i> <?= $da_area ?></span>
+              <span><i class="fa-solid fa-calendar-check" aria-hidden="true"></i> <?= $da_time ?></span>
+            </div>
+            <div class="project-btn-detail">Xem chi tiết công trình <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></div>
+          </div>
+        </article>
+      <?php } } ?>
+    </div>
+  </div>
+</section>
 
-                try {
-                    vp.setPointerCapture(e.pointerId);
-                } catch(err) {}
-            };
+<!-- Hình ảnh thực tế -->
+<section class="section section-bg-white" id="hinh-anh" aria-labelledby="gallery-heading">
+  <div class="container">
+    <header class="section-header">
+      <div class="section-badge">
+        <i class="fa-solid fa-camera" aria-hidden="true"></i> Hoạt động thực tế
+      </div>
+      <h2 class="section-title" id="gallery-heading">
+        Hình Ảnh <span>Thực Tế Tại Công Trường &amp; Xưởng</span>
+      </h2>
+      <p class="section-desc">
+        Khoảnh khắc ghi lại quá trình sản xuất tấm panel cách nhiệt và các công đoạn thi công lắp đặt thực tế của đội ngũ Sáng Tạo EcoPanel.
+      </p>
+    </header>
 
-            const onPointerMove = (e) => {
-                if (!this.isDragging) return;
-                this.currentX = e.clientX;
-                const now = performance.now();
-                const dt = now - lastTime;
-                if (dt > 12) {
-                    velocityX = (this.currentX - lastX) / dt;
-                    lastX = this.currentX;
-                    lastTime = now;
-                }
+    <div class="gallery-grid">
+      <?php if (!empty($gallery)) { foreach ($gallery as $g) {
+          $g_opt = !empty($g['options']) ? json_decode($g['options'], true) : [];
+          $g_span = ($g_opt['span'] ?? 1) == 2 ? 'span-2' : '';
+          $g_img = (!empty($g['photo']) && file_exists(UPLOAD_PHOTO_L . $g['photo']))
+                    ? UPLOAD_PHOTO_L . $g['photo']
+                    : (file_exists('assets/images/' . $g['photo']) ? 'assets/images/' . $g['photo'] : 'assets/images/noimage.png');
+      ?>
+        <figure class="gallery-item <?= $g_span ?>" data-fullimg="<?= $g_img ?>" data-caption="<?= $g['ten' . $lang] ?>">
+          <img src="<?= $g_img ?>" alt="<?= $g['mota' . $lang] ?>" onerror="this.src='assets/images/noimage.png';">
+          <figcaption class="gallery-hover-overlay">
+            <div class="gallery-icon-zoom"><i class="fa-solid fa-expand" aria-hidden="true"></i></div>
+            <div class="gallery-caption"><?= $g['ten' . $lang] ?></div>
+          </figcaption>
+        </figure>
+      <?php } } ?>
+    </div>
+  </div>
+</section>
 
-                const diff = this.currentX - this.startX;
-                if (Math.abs(diff) > 4) {
-                    this.dragPreventClick = true;
-                }
+<!-- Tin tức -->
+<section class="section section-bg-subtle" id="tin-tuc" aria-labelledby="news-heading">
+  <div class="container">
+    <header class="section-header">
+      <div class="section-badge">
+        <i class="fa-solid fa-newspaper" aria-hidden="true"></i> Kiến thức &amp; Tin tức
+      </div>
+      <h2 class="section-title" id="news-heading">
+        Tin Tức <span>Ngành Xây Dựng &amp; Báo Giá</span> Mới Nhất
+      </h2>
+      <p class="section-desc">
+        Cập nhật xu hướng thi công lắp ghép, cẩm nang chọn vật liệu panel đạt chuẩn PCCC và bảng báo giá vật liệu mới nhất 2026.
+      </p>
+    </header>
 
-                if (rafId) cancelAnimationFrame(rafId);
-                rafId = requestAnimationFrame(() => {
-                    if (!this.isDragging) return;
-                    const maxTranslate = 0;
-                    const minTranslate = -this.getMaxOffset();
-                    let newTranslate = this.startTranslate + diff;
+    <div class="news-grid">
+      <?php if (!empty($tintuc)) { foreach ($tintuc as $tt) {
+          $tt_opt = !empty($tt['options']) ? json_decode($tt['options'], true) : [];
+          $tt_author = $tt_opt['author'] ?? 'Nguyễn Thanh Tuyền';
+          $tt_date = date('d/m/Y', $tt['ngaytao']);
+          $tt_date_iso = date('Y-m-d', $tt['ngaytao']);
+          $tt_img = (!empty($tt['photo']) && file_exists(UPLOAD_NEWS_L . $tt['photo']))
+                    ? UPLOAD_NEWS_L . $tt['photo']
+                    : (file_exists('assets/images/' . $tt['photo']) ? 'assets/images/' . $tt['photo'] : 'assets/images/noimage.png');
+      ?>
+        <article class="news-card">
+          <figure class="news-thumb">
+            <img src="<?= $tt_img ?>" alt="<?= $tt['ten' . $lang] ?>" onerror="this.src='assets/images/noimage.png';">
+            <div class="news-date-badge">
+              <i class="fa-regular fa-calendar" aria-hidden="true"></i>
+              <time datetime="<?= $tt_date_iso ?>"><?= $tt_date ?></time>
+            </div>
+          </figure>
+          <div class="news-content">
+            <h3 class="news-title"><?= $tt['ten' . $lang] ?></h3>
+            <p class="news-desc"><?= $tt['mota' . $lang] ?></p>
+            <footer class="news-footer">
+              <div class="news-author">
+                <i class="fa-solid fa-user-pen" aria-hidden="true"></i> <span><?= $tt_author ?></span>
+              </div>
+              <a href="#lien-he" class="news-readmore" aria-label="Đọc tiếp bài viết: <?= $tt['ten' . $lang] ?>">
+                Đọc tiếp <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+              </a>
+            </footer>
+          </div>
+        </article>
+      <?php } } ?>
+    </div>
+  </div>
+</section>
 
-                    // Smooth elastic edge resistance
-                    if (newTranslate > maxTranslate) {
-                        newTranslate = maxTranslate + (newTranslate - maxTranslate) * 0.28;
-                    } else if (newTranslate < minTranslate) {
-                        newTranslate = minTranslate + (newTranslate - minTranslate) * 0.28;
-                    }
-                    this.track.style.transform = `translate3d(${newTranslate}px, 0, 0)`;
-
-                    // Real-time dot stretch and movement
-                    this.syncDotOnDrag(diff);
-                });
-            };
-
-            const onPointerUp = (e) => {
-                if (!this.isDragging) return;
-                this.isDragging = false;
-                vp.classList.remove('is-dragging');
-                if (rafId) cancelAnimationFrame(rafId);
-
-                try {
-                    vp.releasePointerCapture(e.pointerId);
-                } catch(err) {}
-
-                const diff = this.currentX - this.startX;
-                const width = vp.clientWidth || 1;
-                const flickThreshold = 0.25; // px/ms
-                const distThreshold = Math.min(55, width * 0.14);
-
-                let targetPage = this.currentPage;
-                if (diff < -distThreshold || velocityX < -flickThreshold) {
-                    if (this.currentPage < this.totalPages - 1) {
-                        targetPage = this.currentPage + 1;
-                    }
-                } else if (diff > distThreshold || velocityX > flickThreshold) {
-                    if (this.currentPage > 0) {
-                        targetPage = this.currentPage - 1;
-                    }
-                }
-
-                this.goToPage(targetPage, true);
-                this.resetAutoplay();
-            };
-
-            vp.addEventListener('pointerdown', onPointerDown);
-            vp.addEventListener('pointermove', onPointerMove);
-            vp.addEventListener('pointerup', onPointerUp);
-            vp.addEventListener('pointercancel', onPointerUp);
-
-            // Prevent accidental card navigation during drag
-            vp.addEventListener('click', (e) => {
-                if (this.dragPreventClick) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                }
-            }, true);
-        }
-    }
-
-    function initDuanSliders() {
-        document.querySelectorAll('.duan-carousel').forEach(el => {
-            if (!el.__duanSlider) {
-                el.__duanSlider = new DuanSlider(el);
-            }
-        });
-    }
-
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initDuanSliders);
-    } else {
-        initDuanSliders();
-    }
-    window.addEventListener('load', initDuanSliders);
-})();
-</script>
+<!-- Đối tác -->
+<section class="section section-bg-white" id="doi-tac" aria-label="Đối tác vật tư chiến lược" style="padding-top: 10px; padding-bottom: 70px;">
+  <div class="container">
+    <div class="partners-wrapper">
+      <div class="partners-title">ĐỐI TÁC VẬT TƯ CHIẾN LƯỢC &amp; THƯƠNG HIỆU ĐỒNG HÀNH</div>
+      <div class="partners-logo-grid">
+        <?php
+          $partner_icons = [
+            'TÔN HOA SEN' => 'fa-solid fa-shield',
+            'TÔN ĐÔNG Á' => 'fa-solid fa-gear',
+            'BLUESCOPE ZACS' => 'fa-solid fa-gem',
+            'THÉP HÒA PHÁT' => 'fa-solid fa-cubes',
+            'TÔN PHƯƠNG NAM' => 'fa-solid fa-certificate'
+          ];
+          if (!empty($doitac) && count($doitac) > 0) {
+            foreach ($doitac as $dt) {
+              $p_name = mb_strtoupper($dt['ten' . $lang], 'UTF-8');
+              $p_icon = $partner_icons[$p_name] ?? 'fa-solid fa-shield';
+        ?>
+          <div class="partner-logo-item">
+            <?php if (!empty($dt['photo']) && file_exists(UPLOAD_PHOTO_L . $dt['photo'])) { ?>
+              <img src="<?= UPLOAD_PHOTO_L . $dt['photo'] ?>" alt="<?= $p_name ?>" style="max-height: 28px; width: auto; object-fit: contain;">
+            <?php } else { ?>
+              <i class="<?= $p_icon ?>" aria-hidden="true"></i> <?= $p_name ?>
+            <?php } ?>
+          </div>
+        <?php } } else { ?>
+          <div class="partner-logo-item"><i class="fa-solid fa-shield" aria-hidden="true"></i> TÔN HOA SEN</div>
+          <div class="partner-logo-item"><i class="fa-solid fa-gear" aria-hidden="true"></i> TÔN ĐÔNG Á</div>
+          <div class="partner-logo-item"><i class="fa-solid fa-gem" aria-hidden="true"></i> BLUESCOPE ZACS</div>
+          <div class="partner-logo-item"><i class="fa-solid fa-cubes" aria-hidden="true"></i> THÉP HÒA PHÁT</div>
+          <div class="partner-logo-item"><i class="fa-solid fa-certificate" aria-hidden="true"></i> TÔN PHƯƠNG NAM</div>
+        <?php } ?>
+      </div>
+    </div>
+  </div>
+</section>

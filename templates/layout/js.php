@@ -377,3 +377,7 @@ OneSignal.push(function() {
 
 <!-- Js Body -->
 <?= htmlspecialchars_decode($setting['bodyjs']) ?>
+
+
+<!-- Main Custom JavaScript for Sáng Tạo EcoPanel -->
+<script src="assets/js/main.js?v=<?= time() ?>"></script>

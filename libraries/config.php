@@ -35,7 +35,7 @@
 			'host' => '127.0.0.1',
 			'username' => 'root',
 			'password' => '',
-			'dbname' => 'codienlanh_ducnhan',
+			'dbname' => 'sangtao_ecopanel',
 			'port' => 3306,
 			'prefix' => 'table_',
 			'charset' => 'utf8'
