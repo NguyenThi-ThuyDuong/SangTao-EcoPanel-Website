@@ -19,10 +19,7 @@
 
 ## 2. HƯỚNG DẪN KHỞI ĐỘNG NHANH
 
-### Cách 1: Khởi động 1-Click
-Nhấp đúp vào file `run.bat` tại thư mục dự án. Script sẽ tự khởi động server cục bộ và mở trình duyệt tại `http://localhost:8000/`.
-
-### Cách 2: Chạy qua dòng lệnh (Terminal / PowerShell)
+ Chạy qua dòng lệnh (Terminal / PowerShell)
 1. Đảm bảo dịch vụ MySQL đang chạy (qua Laragon hoặc XAMPP).
 2. Chạy lệnh:
    ```bash
